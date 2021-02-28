@@ -132,6 +132,25 @@ usersController.updateUserProfilePic = async (req, res) => {
     }
 };
 
+usersController.updateUserFavoriteOpinions = async (req, res) => {    
+    const { opinionId } = req.body;
+    try {    
+        const user = await User.findOne({ _id: req.userId });        
+        if (user.favoriteOpinions.some(e => e === opinionId)) {
+            user.favoriteOpinions.splice(user.favoriteOpinions.indexOf(opinionId), 1);
+        } else {            
+            user.favoriteOpinions.push(opinionId);
+        }        
+        await User.findByIdAndUpdate(req.userId, user);
+        res.status(200).send({ message: 'User\'s favorite opinions updated' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: 'Error while updating user favorite opinions'            
+        });
+    }
+};
+
 module.exports = usersController;
 
 const createToken = userId => {
