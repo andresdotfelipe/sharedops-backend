@@ -1,12 +1,12 @@
 const Opinion = require('../models/Opinion');
+const User = require('../models/User');
 
 const opinionsController = {};
 
-opinionsController.getOpinions = async (req, res) => {
-    let { page, own, title } = req.query;
+opinionsController.getAllOpinions = async (req, res) => {
+    let { page, title } = req.query;
     let query = {};    
-    const limit = 10;
-    if (own) query.author = req.userId;    
+    const limit = 10;        
     if (title) query.title = { '$regex': title, '$options': 'i' };
     try {
         let opinions = await Opinion.find(query)
@@ -15,11 +15,61 @@ opinionsController.getOpinions = async (req, res) => {
         .limit(limit)
         .populate('author')
         .exec();
-        const opinionsCount = await Opinion.countDocuments();
+        const opinionsCount = await Opinion.countDocuments();        
         res.status(200).send({
             opinions,
             opinionsCount
         });
+    } catch (error) {
+        res.status(500).send({
+            message: 'Error while retrieving opinions'            
+        });
+    }    
+};
+
+opinionsController.getMyOpinions = async (req, res) => {
+    let { page, title } = req.query;
+    let query = {};    
+    const limit = 10;
+    query.author = req.userId;
+    if (title) query.title = { '$regex': title, '$options': 'i' };
+    try {
+        let opinions = await Opinion.find(query)
+        .sort({ createdAt: -1 })
+        .skip(page * limit)
+        .limit(limit)
+        .populate('author')
+        .exec();
+        const opinionsCount = await Opinion.countDocuments(query);
+        res.status(200).send({
+            opinions,
+            opinionsCount
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: 'Error while retrieving opinions'            
+        });
+    }    
+};
+
+opinionsController.getFavoriteOpinions = async (req, res) => {
+    let { page, title } = req.query;      
+    let query = {}, opinions = [], opinion = null, i=0;
+    const limit = 10;
+    const user = await User.findById(req.userId);     
+    if (title) query.title = { '$regex': title, '$options': 'i' };    
+    try {                               
+        do {
+            query._id = user.favoriteOpinions[i+(page*limit)];
+            opinion = await Opinion.findOne(query).populate('author');            
+            if (opinion) opinions.push(opinion);
+            i++;
+        } while (opinion | i !== limit);
+        const opinionsCount = user.favoriteOpinions.length;        
+        res.status(200).send({
+            opinions,
+            opinionsCount
+        });    
     } catch (error) {
         res.status(500).send({
             message: 'Error while retrieving opinions'            

@@ -6,7 +6,7 @@ const auth = require('../middlewares/auth');
 
 //  Controllers
 const { signIn, signUp, getUser, updateUserFavoriteOpinions } = require('../controllers/users.controller');
-const { getOpinions, getOpinion, createOpinion } = require('../controllers/opinions.controller');
+const { getAllOpinions, getMyOpinions, getFavoriteOpinions, getOpinion, createOpinion } = require('../controllers/opinions.controller');
 const { getComments, createComment } = require('../controllers/comments.controller');
 
 //  Users routes
@@ -16,7 +16,9 @@ api.get('/user', auth.checkToken, getUser);
 api.put('/user/favorite-opinions', auth.checkToken, updateUserFavoriteOpinions);
 
 //  Opinions routes
-api.get('/opinions', getOpinions);
+api.get('/opinions', getAllOpinions);
+api.get('/opinions/my-opinions', auth.checkToken, getMyOpinions);
+api.get('/opinions/favorites', auth.checkToken, getFavoriteOpinions);
 api.get('/opinions/:id', getOpinion);
 api.post('/opinions', auth.checkToken, createOpinion);
 
