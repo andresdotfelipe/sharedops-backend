@@ -61,7 +61,7 @@ opinionsController.getFavoriteOpinions = async (req, res) => {
     try {                               
         do {
             query._id = user.favoriteOpinions[i+(page*limit)];
-            opinion = await Opinion.findOne(query).populate('author');            
+            opinion = await Opinion.findOne(query).populate('author').exec();            
             if (opinion) opinions.push(opinion);
             i++;
         } while (opinion | i !== limit);
