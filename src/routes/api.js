@@ -16,7 +16,7 @@ api.get('/user', auth.checkToken, getUser);
 api.put('/user/favorite-opinions', auth.checkToken, updateUserFavoriteOpinions);
 
 //  Opinions routes
-api.get('/opinions', getAllOpinions);
+api.get('/opinions/all', getAllOpinions);
 api.get('/opinions/my-opinions', auth.checkToken, getMyOpinions);
 api.get('/opinions/favorites', auth.checkToken, getFavoriteOpinions);
 api.get('/opinions/:id', getOpinion);
