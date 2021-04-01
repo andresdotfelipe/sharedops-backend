@@ -15,7 +15,7 @@ opinionsController.getAllOpinions = async (req, res) => {
         .limit(limit)
         .populate('author')
         .exec();
-        const opinionsCount = await Opinion.countDocuments();        
+        const opinionsCount = await Opinion.countDocuments(query);        
         res.status(200).send({
             opinions,
             opinionsCount
@@ -65,7 +65,13 @@ opinionsController.getFavoriteOpinions = async (req, res) => {
             if (opinion) opinions.push(opinion);
             i++;
         } while (opinion | i !== limit);
-        const opinionsCount = user.favoriteOpinions.length;        
+        let opinionsCount;
+        if (title) {
+            query._id = user.favoriteOpinions;
+            opinionsCount = await Opinion.countDocuments(query);
+        } else {
+            opinionsCount = user.favoriteOpinions.length;
+        }
         res.status(200).send({
             opinions,
             opinionsCount
