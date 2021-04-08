@@ -5,7 +5,7 @@ const commentsController = {};
 commentsController.getComments = async (req, res) => {    
     const { opinionId } = req.query;
     try {
-        const comments = await Comment.find({ author: req.userId, opinion: opinionId })
+        const comments = await Comment.find({ opinion: opinionId })
         .sort({ createdAt: -1 })
         .populate('author');
         res.status(200).send(comments);
