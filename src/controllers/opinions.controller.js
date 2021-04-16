@@ -13,7 +13,7 @@ opinionsController.getAllOpinions = async (req, res) => {
         .sort({ createdAt: -1 })
         .skip(page * limit)
         .limit(limit)
-        .populate('author')
+        .populate(['author', 'comments'])
         .exec();
         const opinionsCount = await Opinion.countDocuments(query);        
         res.status(200).send({
@@ -38,7 +38,7 @@ opinionsController.getMyOpinions = async (req, res) => {
         .sort({ createdAt: -1 })
         .skip(page * limit)
         .limit(limit)
-        .populate('author')
+        .populate(['author', 'comments'])
         .exec();
         const opinionsCount = await Opinion.countDocuments(query);
         res.status(200).send({
@@ -61,7 +61,7 @@ opinionsController.getFavoriteOpinions = async (req, res) => {
     try {                               
         do {
             query._id = user.favoriteOpinions[i+(page*limit)];
-            opinion = await Opinion.findOne(query).populate('author').exec();            
+            opinion = await Opinion.findOne(query).populate(['author', 'comments']).exec();            
             if (opinion) opinions.push(opinion);
             i++;
         } while (opinion | i !== limit);
@@ -90,10 +90,10 @@ opinionsController.getOpinion = async (req, res) => {
         if (id === 'random') {
             const opinionsCount = await Opinion.countDocuments();                        
             const randomNumber = Math.floor(Math.random() * (opinionsCount - 0)) + 0;
-            opinion = await Opinion.findOne().skip(randomNumber).populate('author').exec();
+            opinion = await Opinion.findOne().skip(randomNumber).populate(['author', 'comments']).exec();
             // opinion = await Opinion.aggregate([{ $sample: { size: 1 } }]);            
         } else {
-            opinion = await Opinion.findById(id).populate('author').exec();
+            opinion = await Opinion.findById(id).populate(['author', 'comments']).exec();
         } 
         res.status(200).send(opinion);
     } catch (error) {                
