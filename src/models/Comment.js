@@ -2,17 +2,13 @@ const { Schema, model } = require('mongoose');
 
 const CommentSchema = new Schema({
     author: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    opinion: {
-        type: Schema.Types.ObjectId,
-        ref: 'Opinion'
-    },
+        name: { type: String, required: true },
+        profilePicUrl: { type: String, required: true }
+    },    
     body: { type: String, required: true },    
 },
 {
-    timestamps: true
+    timestamps: true,            
 });
 
 module.exports = model('Comment', CommentSchema);
