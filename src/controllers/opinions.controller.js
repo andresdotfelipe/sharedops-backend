@@ -13,7 +13,17 @@ opinionsController.getAllOpinions = async (req, res) => {
         .sort({ createdAt: -1 })
         .skip(page * limit)
         .limit(limit)
-        .populate(['author', 'comments'])
+        .populate([
+            'author', 
+            { 
+                path: 'comments', 
+                populate: { 
+                    path: 'author', 
+                    select: 'name profilePicUrl', 
+                    model: 'User' 
+                } 
+            }
+        ])
         .exec();
         const opinionsCount = await Opinion.countDocuments(query);        
         res.status(200).send({
@@ -38,7 +48,17 @@ opinionsController.getMyOpinions = async (req, res) => {
         .sort({ createdAt: -1 })
         .skip(page * limit)
         .limit(limit)
-        .populate(['author', 'comments'])
+        .populate([
+            'author', 
+            { 
+                path: 'comments', 
+                populate: { 
+                    path: 'author', 
+                    select: 'name profilePicUrl', 
+                    model: 'User' 
+                } 
+            }
+        ])
         .exec();
         const opinionsCount = await Opinion.countDocuments(query);
         res.status(200).send({
@@ -61,7 +81,17 @@ opinionsController.getFavoriteOpinions = async (req, res) => {
     try {                               
         do {
             query._id = user.favoriteOpinions[i+(page*limit)];
-            opinion = await Opinion.findOne(query).populate(['author', 'comments']).exec();            
+            opinion = await Opinion.findOne(query).populate([
+                'author', 
+                { 
+                    path: 'comments', 
+                    populate: { 
+                        path: 'author', 
+                        select: 'name profilePicUrl', 
+                        model: 'User' 
+                    } 
+                }
+            ]).exec();            
             if (opinion) opinions.push(opinion);
             i++;
         } while (opinion | i !== limit);
@@ -90,10 +120,29 @@ opinionsController.getOpinion = async (req, res) => {
         if (id === 'random') {
             const opinionsCount = await Opinion.countDocuments();                        
             const randomNumber = Math.floor(Math.random() * (opinionsCount - 0)) + 0;
-            opinion = await Opinion.findOne().skip(randomNumber).populate(['author', 'comments']).exec();
-            // opinion = await Opinion.aggregate([{ $sample: { size: 1 } }]);            
+            opinion = await Opinion.findOne().skip(randomNumber).populate([
+                'author', 
+                { 
+                    path: 'comments', 
+                    populate: { 
+                        path: 'author', 
+                        select: 'name profilePicUrl', 
+                        model: 'User' 
+                    } 
+                }
+            ]).exec();                        
         } else {
-            opinion = await Opinion.findById(id).populate(['author', 'comments']).exec();
+            opinion = await Opinion.findById(id).populate([
+                'author', 
+                { 
+                    path: 'comments', 
+                    populate: { 
+                        path: 'author', 
+                        select: 'name profilePicUrl', 
+                        model: 'User' 
+                    } 
+                }
+            ]).exec();
         } 
         res.status(200).send(opinion);
     } catch (error) {                
@@ -104,8 +153,7 @@ opinionsController.getOpinion = async (req, res) => {
 };
 
 opinionsController.createOpinion = async (req, res) => {
-    let { title, body, opinionImageUrl } = req.body;
-    console.log(req.body);
+    let { title, body, opinionImageUrl } = req.body;    
     title = title.trim();    
     const newOpinion = new Opinion({ title, body, opinionImageUrl });
     newOpinion.author =  req.userId;
