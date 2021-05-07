@@ -81,6 +81,18 @@ usersController.getUser = async (req, res) => {
     }
 };
 
+usersController.getUserProfile = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await User.findOne({ _id: id}).select('-favoriteOpinions -modifiedAt');
+        res.status(200).send(user);
+    } catch (error) {
+        res.status(404).send({
+            message: 'User not found'
+        });
+    }
+};
+
 usersController.updateUser = async (req, res) => {    
     let { name } = req.body;
     if (name) {
