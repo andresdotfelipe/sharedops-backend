@@ -113,6 +113,40 @@ opinionsController.getFavoriteOpinions = async (req, res) => {
     }    
 };
 
+opinionsController.getUserOpinions = async (req, res) => {
+    let { page, userId } = req.query;
+    let query = {};    
+    const limit = 10;
+    query.author = userId;    
+    try {
+        let opinions = await Opinion.find(query)
+        .sort({ createdAt: -1 })
+        .skip(page * limit)
+        .limit(limit)
+        .populate([
+            'author', 
+            { 
+                path: 'comments', 
+                populate: { 
+                    path: 'author', 
+                    select: 'name profilePicUrl', 
+                    model: 'User' 
+                } 
+            }
+        ])
+        .exec();
+        const opinionsCount = await Opinion.countDocuments(query);
+        res.status(200).send({
+            opinions,
+            opinionsCount
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: 'Error while retrieving opinions'            
+        });
+    }    
+};
+
 opinionsController.getOpinion = async (req, res) => {
     const { id } = req.params;    
     let opinion = null;
