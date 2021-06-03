@@ -84,7 +84,7 @@ usersController.getUser = async (req, res) => {
 usersController.getUserProfile = async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await User.findOne({ _id: id}).select('-favoriteOpinions -modifiedAt');
+        const user = await User.findOne({ _id: id}).select('-favoriteOpinions -updatedAt');
         res.status(200).send(user);
     } catch (error) {
         res.status(404).send({

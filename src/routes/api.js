@@ -13,7 +13,7 @@ const { createComment } = require('../controllers/comments.controller');
 api.post('/signin', signIn);
 api.post('/signup', signUp);
 api.get('/user', auth.checkToken, getUser);
-api.get('/user-profile', getUserProfile);
+api.get('/user-profile/:id', getUserProfile);
 api.put('/user/favorite-opinions', auth.checkToken, updateUserFavoriteOpinions);
 
 //  Opinions routes
