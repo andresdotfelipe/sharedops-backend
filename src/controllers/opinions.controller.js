@@ -114,7 +114,7 @@ opinionsController.getFavoriteOpinions = async (req, res) => {
 };
 
 opinionsController.getUserOpinions = async (req, res) => {
-    let { page, userId } = req.query;
+    let { userId, page } = req.query;
     let query = {};    
     const limit = 10;
     query.author = userId;    
