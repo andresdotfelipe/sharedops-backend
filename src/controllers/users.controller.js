@@ -93,55 +93,54 @@ usersController.getUserProfile = async (req, res) => {
     }
 };
 
-usersController.updateUser = async (req, res) => {    
-    let { name } = req.body;
-    if (name) {
-        name = name.trim();
-        const user = await User.findOne({ name });
-        if (user) {
-            return res.status(409).send({
-                error: { name: 'Name in use' }
-            });
+usersController.updateUser = async (req, res) => {        
+    let { name, password, newPassword, confirmNewPassword } = req.body;    
+    try {  
+        if (name) {
+            name = name.trim();
+            const user = await User.findOne({ name });
+            if (user) {            
+                if (String(user._id) !== req.userId) {
+                    return res.status(409).send({
+                        error: { name: 'Name in use' }
+                    });
+                } else {
+                    delete req.body.name;
+                }
+            }
         }
-    }             
-    try {                
-        await User.findByIdAndUpdate(req.userId, req.body);
-        res.status(200).send({ message: 'User updated' });
+        if (password) {
+            const user = await User.findById(req.userId).select('+password');            
+            const match = await bcrypt.compare(password, user.password);
+            if (!match) {
+                delete req.body.password;
+                return res.status(401).send({ 
+                    error: { password: 'Password incorrect' } 
+                });                
+            } else {
+                if (newPassword !== confirmNewPassword) {
+                    delete req.body.password;
+                    return res.status(401).send({
+                        error: { confirmNewPassword: 'New password does not match' }
+                    });
+                } else {
+                    const salt = await bcrypt.genSalt(10);            
+                    req.body.password = await bcrypt.hash(newPassword, salt);
+                    delete req.body.newPassword;
+                    delete req.body.confirmNewPassword;
+                }
+            }
+        }           
+        if (req.body !== {}) {
+            await User.findByIdAndUpdate(req.userId, req.body);
+            res.status(200).send({ message: 'User updated' });
+        }        
     } catch (error) {
+        console.log(error);
         res.status(500).send({
-            message: 'Error while updating user name'                
+            message: 'Error while updating user'                
         });
     }    
-};
-
-usersController.updateUsername = async (req, res) => {
-    let { name } = req.body;
-    name = name.trim();
-    const user = await User.findOne({ name });
-    if (user) {
-        res.status(409).send({
-            error: { name: 'Name in use' }
-        });
-    } else {
-        try {
-            await User.findByIdAndUpdate(req.userId, name);
-        } catch (error) {
-            res.status(500).send({
-                message: 'Error while updating user name'                
-            });
-        }
-    }    
-};
-
-usersController.updateUserProfilePic = async (req, res) => {
-    const { profilePicUrl } = req.body;
-    try {
-        await User.findByIdAndUpdate(req.userId, profilePicUrl);
-    } catch (error) {
-        res.status(500).send({
-            message: 'Error while updating user profile picture'            
-        });
-    }
 };
 
 usersController.updateUserFavoriteOpinions = async (req, res) => {    
