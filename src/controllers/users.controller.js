@@ -7,34 +7,26 @@ const usersController = {};
 
 usersController.signIn = async (req, res) => {
     let { name, password } = req.body;
-    name = name.trim();
-    if (name === 'testuser' && password === 'testuser') {
-        let token = createToken(1);
-        res.status(200).send({            
-            message: 'Successful Sign In',
-            token
+    name = name.trim();    
+    const user = await User.findOne({ name }).select('+password');
+    if (!user) {
+        res.status(401).send({
+            error: { name: 'Name incorrect' }
         });
     } else {
-        const user = await User.findOne({ name }).select('+password');
-        if (!user) {
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
             res.status(401).send({
-                error: { name: 'Name incorrect' }
-            });
+                error: { password: 'Password incorrect' }
+            })
         } else {
-            const match = await bcrypt.compare(password, user.password);
-            if (!match) {
-                res.status(401).send({
-                    error: { password: 'Password incorrect' }
-                })
-            } else {
-                let token = createToken(user._id);
-                res.status(200).send({
-                    message: 'Successful Sign In',
-                    token
-                });
-            }
+            let token = createToken(user._id);
+            res.status(200).send({
+                message: 'Successful Sign In',
+                token
+            });
         }
-    }
+    }    
 };
 
 usersController.signUp = async (req, res) => {
