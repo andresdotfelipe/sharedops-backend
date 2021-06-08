@@ -1,6 +1,6 @@
 # Sharedops (back-end)
 
-Sharedops is a website where people can share their opinions. This is the back-end for Sharedops, built with:
+Sharedops is a web application where people can share their opinions. This is the back-end for Sharedops, built with:
 
 * Node JS - To use JavaScript on the server side.
 * Express - To use MVC architecture on the server side.
