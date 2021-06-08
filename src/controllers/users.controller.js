@@ -135,8 +135,7 @@ usersController.updateUser = async (req, res) => {
             await User.findByIdAndUpdate(req.userId, req.body);
             res.status(200).send({ message: 'User updated' });
         }        
-    } catch (error) {
-        console.log(error);
+    } catch (error) {        
         res.status(500).send({
             message: 'Error while updating user'                
         });
