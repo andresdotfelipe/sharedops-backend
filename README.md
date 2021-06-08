@@ -6,7 +6,7 @@ Sharedops is a web application where people can share their opinions. This is th
 * Express - To use MVC architecture on the server side.
 * MongoDB - To support large amounts of both data and traffic.
 
-This website is also made with learning purposes.
+This web application is also made with learning purposes.
 
 ## Installation
 
