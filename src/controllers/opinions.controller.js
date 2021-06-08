@@ -3,6 +3,12 @@ const User = require('../models/User');
 
 const opinionsController = {};
 
+/*
+    .sort({ createdAt: -1 }) Sorts by created date, from recent to oldest
+    .skip(page * limit) The current opinion's page
+    .limit(limit) Limit es the number of opinions to show per page
+*/
+
 opinionsController.getAllOpinions = async (req, res) => {
     let { page, title } = req.query;
     let query = {};    

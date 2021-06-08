@@ -8,6 +8,7 @@ commentsController.createComment = async (req, res) => {
     const newComment = new Comment({ author: req.userId, body });
     try {        
         const comment = await newComment.save();
+        // Updates opinion with new comment, inserting it in the beginning
         const updatedOpinion = await Opinion.findByIdAndUpdate(opinionId, 
         { $push: { 'comments': { $each: [comment], $position: 0 } } }, { upsert: true, new: true })
         .populate([
