@@ -8,20 +8,22 @@ const server = express();
 //  Settings
 server.set('port', serverConfig.port);
 
-//  Middlewares
-
-/*
-    CORS origin:
-        - Production: https://sharedops.herokuapp.com
-        - Development: http://localhost:3000
-*/
-// server.use(cors({
-//     credentials: true,
-//     origin: [
-//         'http://localhost:3000'
-//     ]
-// }));
-server.use(cors());
+//  Last element of whiteList is the front-end development origin.
+const whiteList = [
+    'https://sharedops.netlify.app',
+    'http://sharedops.netlify.app',
+    'http://localhost:3000'
+];
+server.use(cors({
+    credentials: true,
+    origin: (origin, callback) => {
+        if (whiteList.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+}));
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 
