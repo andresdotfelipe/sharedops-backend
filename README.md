@@ -4,7 +4,7 @@ Sharedops is a website where people can share their opinions. This is the back-e
 
 * Node JS - To use JavaScript on the server side.
 * Express - To use MVC architecture on the server side.
-* MongoDB - To store large amounts of both data and traffic.
+* MongoDB - To support large amounts of both data and traffic.
 
 This website is also made with learning porpuses.
 
