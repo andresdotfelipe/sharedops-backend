@@ -2,9 +2,10 @@
 
 Sharedops is a web application where people can share their opinions. This is the back-end for Sharedops, built with:
 
-* Node JS - To use JavaScript on the server side.
-* Express - To use MVC architecture on the server side.
-* MongoDB - To support large amounts of both data and traffic.
+* [Node JS](https://nodejs.org/en/) - To use JavaScript on the server side.
+* [Express](https://expressjs.com/) - To use MVC architecture on the server side.
+* [MongoDB](https://www.mongodb.com/) - To support large amounts of both data and traffic.
+* [Mongoose](https://mongoosejs.com/) - To model the application data.
 
 This web application is also made with learning purposes.
 
