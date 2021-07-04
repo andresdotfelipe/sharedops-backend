@@ -2,13 +2,7 @@ const mongoose = require('mongoose');
 const { dbConfig } = require('./config');
 
 const connectDB = () => {
-    const { user, password, host, port, name } = dbConfig;
-
-    /*
-        - Production: mongodb://${user}:${password}@${host}:${port}/${name}
-        - Development: mongodb://${host}/${name}
-    */
-    const MONGODB_URI = `mongodb://${host}/${name}`;
+    const { MONGODB_URI } = dbConfig;    
 
     mongoose.connect(MONGODB_URI, {
         useNewUrlParser: true,
