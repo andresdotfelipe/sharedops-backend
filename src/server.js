@@ -10,8 +10,8 @@ server.set('port', serverConfig.port);
 
 //  Last element of whiteList is the front-end development origin.
 const whiteList = [
-    'https://sharedopsapi.herokuapp.com/api',
-    'http://sharedopsapi.herokuapp.com/api',
+    'https://sharedopsapi.herokuapp.com',
+    'http://sharedopsapi.herokuapp.com',
     'http://localhost:4000',
     'https://sharedops.vercel.app',
     'http://sharedops.vercel.app',
