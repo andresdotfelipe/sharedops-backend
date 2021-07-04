@@ -5,7 +5,7 @@ const config = {
         port: PORT || 4000
     },
     dbConfig: {
-        MONGODB_URI
+        mongodb_uri: MONGODB_URI
     }
 };
 
