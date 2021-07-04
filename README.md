@@ -20,10 +20,9 @@ git clone https://github.com/andresfelipedev/sharedops-backend.git
 
 2. Run `npm install` if your using [**npm**](https://www.npmjs.com/) or `yarn install` if your using [**yarn**](https://yarnpkg.com/) instead.
 
-3. Create a `.env` file in the root directory with the next variables:
+3. Create a `.env` file in the root directory with the next environment variables:
 ```
-DB_HOST=localhost
-DB_NAME=sharedops
+MONGODB_URI=mongodb://localhost/sharedops
 TOKEN_KEY="Token-Auth"
 ```
 
@@ -31,7 +30,8 @@ TOKEN_KEY="Token-Auth"
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Create a pull request to contribute this project. Open an issue to discuss major changes.
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
