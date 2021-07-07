@@ -10,8 +10,8 @@ server.set('port', serverConfig.port);
 
 //  Last element of whiteList is the front-end development origin.
 const whiteList = [
-    'https://sharedops.vercel.app',
-    'http://sharedops.vercel.app',
+    'https://sharedops.netlify.app',
+    'http://sharedops.netlify.app',
     'http://localhost:3000'
 ];
 server.use(cors({
