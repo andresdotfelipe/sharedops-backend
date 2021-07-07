@@ -18,7 +18,7 @@ cd sharedops-backend
 git clone https://github.com/andresfelipedev/sharedops-backend.git
 ```
 
-2. Run `npm install` if your using [**npm**](https://www.npmjs.com/) or `yarn install` if your using [**yarn**](https://yarnpkg.com/) instead.
+2. Run `npm install`.
 
 3. Create a `.env` file in the root directory with the next environment variables:
 ```
@@ -30,7 +30,7 @@ TOKEN_KEY="Token-Auth"
 
 ## Contributing
 
-Create a pull request to contribute this project. Open an issue to discuss major changes.
+Create a pull request to contribute to this project. Open an issue to discuss major changes.
 
 ## License
 
